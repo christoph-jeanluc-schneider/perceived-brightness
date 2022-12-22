@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<table>
+			<thead>
+				<th>Hue</th>
+				<th>Brightness</th>
+			</thead>
+			<tbody id="tbody"></tbody>
+		</table>
+		<script>
+			function hueToRGB(h) {
+				const s = 1,
+					l = 0.5;
+				let a = s * Math.min(l, 1 - l);
+				let f = (n, k = (n + h / 30) % 12) =>
+					l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+				return [f(0), f(8), f(4)];
+			}
+
+			function rgbToLigntness([red, green, blue]) {
+				return Math.sqrt(0.299 * red ** 2 + 0.587 * green ** 2 + 0.114 * blue ** 2);
+			}
+
+			const tbody = document.getElementById('tbody');
+			const values = [];
+
+			for (let i = 0; i <= 360; i++) {
+				const l = rgbToLigntness(hueToRGB(i));
+				values.push(l);
+				const row = document.createElement('tr');
+				row.innerHTML = `<td>${i}</td><td>${l}</td>`;
+				tbody.append(row);
+			}
+
+			console.log(JSON.stringify(values, null, 4))
+		</script>
+	</body>
+</html>
